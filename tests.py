@@ -1,6 +1,7 @@
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
 from functions.write_file import write_file
+from functions.run_python import run_python_file
 
 def tests():
     cases = [
@@ -40,4 +41,23 @@ def test_write():
         print(write_file(case[0], case[1], case[2]))
         print("")
 
-test_write()
+def test_run():
+    cases = [
+        ("calculator", "main.py"),
+        ("calculator", "main.py", ["3 + 5"]),
+        ("calculator", "tests.py"),
+        ("calculator", "../main.py"),
+        ("calculator", "nonexistent.py")
+    ]
+
+    for case in cases:
+        if len(case) > 2:
+            print(f"Result for {case} file:")
+            print(run_python_file(case[0], case[1], case[2]))
+            print("")
+        else:
+            print(f"Result for {case} file:")
+            print(run_python_file(case[0], case[1]))
+            print("")
+
+test_run()
