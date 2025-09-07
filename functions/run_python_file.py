@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=[]):
     try:
@@ -29,3 +30,22 @@ def run_python_file(working_directory, file_path, args=[]):
             return f'STDOUT: {completed_process.stdout}\nSTDERR: {completed_process.stderr}'
     except Exception as F:
         return f"Error: executing Python file: {F}"
+
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a python file constrained to the working directory, with optional arguments.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path of the python file we want to run, relative to the working directory.",
+            ),
+            "args": types.Schema(
+                type=types.Type.STRING,
+                description="A list of the optional arguments to run the files with."
+            )
+        },
+    ),
+)
