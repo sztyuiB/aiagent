@@ -8,6 +8,7 @@ from functions.get_files_info import schema_get_files_info
 from functions.get_file_content import schema_get_file_content
 from functions.write_file import schema_write_file
 from functions.run_python_file import schema_run_python_file
+from functions.call_function import call_function
 
 system_prompt = '''
 You are a helpful AI coding agent.
@@ -43,7 +44,13 @@ response = client.models.generate_content(
     )
 
 if len(response.function_calls) > 0:
-    print(f"Calling function: {response.function_calls[0].name}({response.function_calls[0].args})")
+    if "--verbose" in sys.argv:
+        actual_call = call_function(response.function_calls[0], verbose=True)
+        try:
+            print(f"-> {actual_call.parts[0].function_response.response}")
+        except Exception as E:
+            print(f"Fatal error: {E}")
+    #print(f"Calling function: {response.function_calls[0].name}({response.function_calls[0].args})")
 else:
     print(response.text)
 
